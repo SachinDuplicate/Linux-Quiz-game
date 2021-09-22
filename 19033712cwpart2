@@ -1,0 +1,173 @@
+#!/bin/bash
+Count=1
+Secretkey=open
+Times=4
+while [[ $Count -lt 5 ]];
+do
+        echo -e "Enter Password: \c"
+        read open
+        if [[ $Secretkey == $open ]];
+        then
+                break
+        else
+                echo -e "Incorrect Password! Try Again $Count times."
+                echo -e "Remaining Probation: $Times\n"
+                ((Count++))
+                ((Times--))
+        fi
+done
+
+if [ $Count -gt 3 ];
+then
+        exit
+fi
+
+if [[ "$1" =~ ^[+-]?[0-9]+$ ]];
+then
+        echo "Please enter username."
+        exit
+elif ! [[ "$2" =~ ^[+-]?[0-9]+$ ]];
+        then
+                echo "Parameter required. (name idno)"
+                exit
+fi
+echo -e "\nWelcome to program $1. \nYour ID number is $2."
+echo -e "$(date)\n"
+
+#function for playerSelection.
+playerSelection(){
+        echo -e "\nEnter the code of country from the table: "
+        echo -e "+-------------+-------------+"
+        echo -e "|Country Name | Country Code|"
+        echo -e "+-------------+-------------+"
+        echo -e "| Brazil      |     BRZ     |"
+        echo -e "| Argentina   |     ARG     |"
+        echo -e "| Nepal       |     NEP     |"
+        echo -e "| China       |     CHI     |"
+        echo -e "| England     |     ENG     |"
+        echo -e "+-------------+-------------+"
+        condition="true"
+
+                while [[ $condition == "true" ]];
+                do
+                echo -e "\nEnter country code to find the best team: \c"
+                read CountryCode
+
+                case $CountryCode in
+
+                        "BRZ" | "brz" )
+                        echo -e "Correct"
+                        echo -e "Information about your team.\n"
+						echo -e "National team of brazil began with the team's first international match in 1914 with Argentina.\nBrazil played in FIFA World Cup in 1930 and have history with the win of five times world cup. \nIt is one of the best team in the world.\n"
+                        condition="false";;
+
+                        "ARG" | "arg" )
+                        echo -e "Incorrect! Try again"
+                        ;;
+
+                        "NEP" | "nep" )
+                        echo -e "Incorrect! Try again"
+                        ;;
+
+                        "CHI" | "chi" )
+                        echo -e "Incorrect! Try again"
+                        ;;
+
+                        "ENG" | "eng" )
+                        echo -e "Incorrect! Try again"
+                        ;;
+
+                         *)
+                        echo -e "code invalid! Try Again.\n"
+                esac
+        done
+
+        Select()
+        {
+                condition="true"
+                while [[ $condition == "true" ]];
+                do
+                        echo -e "\nDo you want to exit the program?(Y/N): "
+                        read Return
+                        case $Return in
+                                "N" | "n" )
+                                playerSelection;;
+
+                                "Y" | "y" )
+                                exit
+                                condition+"false";;
+
+                                *)
+                                echo "invalid option! Select from option.\n"
+                        esac
+                done
+        }
+
+        echo -e "Select code of player you want in your team:"
+        echo -e "+---------------+-------------+"
+        echo -e "|  Player Name  | Player Code |"
+        echo -e "+---------------+-------------|"
+        echo -e "| Lionel Messi  |     LM      |"
+        echo -e "| Neymar Junior |     NJ      |"
+        echo -e "| Kiran Chemjong|     KC      |"
+        echo -e "| Zheng Zhi     |     ZZ      |"
+        echo -e "| Harry Kane    |     HK      |"
+        echo -e "+---------------+-------------+"
+        Sucess=true
+        while [ $Sucess == true ]
+        do
+                echo -e "Choose any three players for your team (use space for next code): \c"
+                read Player1 Player2 Player3
+
+        Player=($Player1 $Player2 $Player3)
+        if [[ $Player1 != $Player2 && $Player2 != $Player3 && $Player3 != $Player1 ]]
+        then
+        if [[ $Player1 == LM || $Player1 == NJ || $Player1 == KC || $Player1 == ZZ || $Player1 == RT ]]
+        then
+        if [[ $Player2 == LM || $Player2 == NJ || $Player2 == KC || $Player2 == ZZ || $Player2 == RT ]]
+        then
+        if [[ $Player3 == LM || $Player3 == NJ || $Player3 == KC || $Player3 == ZZ || $Player3 == RT ]]
+        then
+        Sucess=false
+        if [[ ${#Player[@]} -eq 3 ]]
+        then
+        PS3="Please select one number from the list(1-3): "
+        select File in $Player1 $Player2 $Player3
+        do
+                if [ -r $File ]
+                then
+                        move="don't"
+                        cat $File
+                        break
+                else
+                        move="do"
+                        echo -e "File not found.\n"
+                break
+                fi
+                done
+                else
+                        echo -e "invalid code! Try again.\n"
+                        playerSelection
+                fi
+		else 
+			echo -e "Enter three codes."
+		fi
+		else
+                        echo -e "File not found! try again."
+                fi
+                else
+                        echo -e "File not found! try again.\n"
+                fi
+                else
+                        echo -e "Enter different codes.\n"
+                fi
+                done
+        if [[ move == "do" ]]
+        then
+                playerSelection #playerSelection is being called after the input value is invalid.
+        else
+                Select
+        fi
+}
+playerSelection
+Select
